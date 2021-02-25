@@ -5,13 +5,16 @@ from random import randint
 
 
 class Aliens:
-    def __init__(self, settings, screen, alien_group, ship_height, game, bullets=None):
+    def __init__(self, settings, screen, alien_group, explosion_group, ship_height, game, stats, sb, bullets=None):
         self.settings = settings
         self.aliens = alien_group
+        self.explosion_group = explosion_group
         self.screen = screen
         self.game = game
         self.ship_height = ship_height
         self.bullets = bullets
+        self.stats = stats
+        self.sb = sb
         self.create_fleet()
 
     def create_fleet(self):
@@ -71,12 +74,25 @@ class Aliens:
             self.game.reset()
             return
 
+        collisions = pg.sprite.groupcollide(self.explosion_group, self.aliens, False, False)
+        if collisions:
+            for aliens in collisions.values():
+                for alien in aliens:
+                    if not alien.dead:
+                        alien.dead = True
+                        self.explosion_group.add(alien)
+                        self.stats.score += self.settings.alien_points * len(aliens)
+                        self.sb.check_high_score(self.stats.score)
+                        self.sb.prep_score()
+
         # for y in range(rows_per_screen):
         #     for x in range(aliens_per_row):
         # row = 5
         for alien in self.aliens.copy():
             alien.update()
-            if alien.rect.bottom <= 0 or alien.reallydead: self.aliens.remove(alien)
+            if alien.rect.bottom <= 0 or alien.reallydead:
+                self.aliens.remove(alien)
+                self.explosion_group.remove(alien)
 
     def draw(self):
         for alien in self.aliens.sprites(): alien.draw()
@@ -89,7 +105,6 @@ class Alien(Sprite):   # INHERITS from SPRITE
     timers = []
     for i in range(3):
         timers.append(Timer(frames=images[i], wait=700))
-    timer_boom = Timer(frames=images_boom, wait=100, looponce=True)
 
     def __init__(self, settings, screen, number=0, x=0, y=0, speed=0, bullets=None, shooting=False):
         super().__init__()
@@ -130,18 +145,19 @@ class Alien(Sprite):   # INHERITS from SPRITE
             if num == 1:
                 self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
         if self.dead and not self.timer_switched:
-            self.timer = Alien.timer_boom
+            self.timer = Timer(frames=Alien.images_boom, wait=100, looponce=True)
             self.timer_switched = True
         elif self.dead and self.timer_switched:
             # print("switched to boom timer", self.timer_boom.frame_index(), len(Alien.images_boom))
-            if self.timer_boom.frame_index() == len(Alien.images_boom) - 1:
+            if self.timer.frame_index() == len(Alien.images_boom) - 1:
                 self.dead = False
                 self.timer_switched = False
                 self.reallydead = True
                 self.timer.reset()
-        delta = self.settings.alien_speed * self.settings.fleet_direction
-        self.rect.x += delta
-        self.x = self.rect.x
+        if not self.timer_switched:
+            delta = self.settings.alien_speed * self.settings.fleet_direction
+            self.rect.x += delta
+            self.x = self.rect.x
 
     def draw(self):
         # image = Alien.images[self.number]

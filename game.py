@@ -48,21 +48,23 @@ class Game:
 
         ship_group = Group()
 
+        explosion_group = Group()
+
         self.stats = GameStats(settings=self.settings)
         self.sb = Scoreboard(settings=self.settings, screen=self.screen, stats=self.stats, sound=self.sound)
 
         self.alienBullets = AlienBullets(bullet_group=alien_bullet_group, enemy_group=barrier_group, enemy_bullet_group=human_bullet_group,
                                          settings=self.settings, ship_group=ship_group,
                                          stats=self.stats, sb=self.sb, game=self)
-        self.aliens = Aliens(settings=self.settings, screen=self.screen, alien_group=alien_group,
-                             ship_height=self.ship_height, game=self, bullets=self.alienBullets)
+        self.aliens = Aliens(settings=self.settings, screen=self.screen, alien_group=alien_group, explosion_group=explosion_group,
+                             ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb, bullets=self.alienBullets)
 
         self.barrier = Barriers(settings=self.settings, screen=self.screen, ally_group=barrier_group,
                                 ship_height=self.ship_height, game=self)
 
         self.bullets = Bullets(bullet_group=human_bullet_group, alien_bullet_group=alien_bullet_group,
-                               enemy_group=alien_group, barrier_group=barrier_group, settings=self.settings,
-                               aliens=self.aliens, stats=self.stats, sb=self.sb)
+                               enemy_group=alien_group, barrier_group=barrier_group, explosion_group=explosion_group,
+                               settings=self.settings, aliens=self.aliens, stats=self.stats, sb=self.sb)
         self.ship = Ship(screen=self.screen, settings=self.settings, bullets=self.bullets, sound=self.sound) # add ship group
         ship_group.add(self.ship)
         self.settings.init_dynamic_settings()

@@ -5,11 +5,12 @@ from random import randint
 
 
 class Bullets:
-    def __init__(self, bullet_group, alien_bullet_group, enemy_group, barrier_group, settings, aliens, stats, sb):
+    def __init__(self, bullet_group, alien_bullet_group, enemy_group, barrier_group, explosion_group, settings, aliens, stats, sb):
         self.bullets = bullet_group
         self.alien_bullets = alien_bullet_group
         self.alien_group = enemy_group
         self.barrier_group = barrier_group
+        self.explosion_group = explosion_group
         self.settings = settings
         self.aliens = aliens
         self.stats = stats
@@ -35,10 +36,12 @@ class Bullets:
         if collisions:
             for aliens in collisions.values():
                 for alien in aliens:
-                    alien.dead = True
-                self.stats.score += self.settings.alien_points * len(aliens)
-                self.sb.check_high_score(self.stats.score)
-                self.sb.prep_score()
+                    if not alien.dead:
+                        alien.dead = True
+                        self.explosion_group.add(alien)
+                        self.stats.score += self.settings.alien_points * len(aliens)
+                        self.sb.check_high_score(self.stats.score)
+                        self.sb.prep_score()
         elif pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False):
             print('hit')
         if len(self.alien_group) == 0:
@@ -59,8 +62,6 @@ class Bullet(Sprite):
 
     images_boom = [pg.image.load('images/bullet_explosion' + str(i) + '.png') for i in range(10)]
 
-    timer_boom = Timer(frames=images_boom, wait=100, looponce=True)
-
     def __init__(self, settings, screen, ship):
         super().__init__()
         self.screen = screen
@@ -74,17 +75,17 @@ class Bullet(Sprite):
         self.collide = False
         self.explode = False
         self.gone = False
-        self.timer = Bullet.timer_boom
+        self.timer = Timer(frames=Bullet.images_boom, wait=100, looponce=True)
 
     def update(self):
         if self.collide and not self.explode:
             self.explode = True
         elif self.collide and self.explode:
-            if self.timer_boom.frame_index() == len(Bullet.images_boom) - 1:
+            if self.timer.frame_index() == len(Bullet.images_boom) - 1:
                 self.gone = True
                 self.explode = False
                 self.collide = False
-                self.timer_boom.reset()
+                self.timer.reset()
         else:
             self.y -= self.speed_factor
             self.rect.y = self.y
