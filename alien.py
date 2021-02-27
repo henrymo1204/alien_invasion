@@ -140,7 +140,7 @@ class Alien(Sprite):   # INHERITS from SPRITE
         return r.right >= rscreen.right or r.left <= 0
 
     def update(self):
-        num = randint(0, 10000)
+        num = randint(0, 5000)
         if self.shooting_bullets:
             if num == 1:
                 self.bullets.add(settings=self.settings, screen=self.screen, ship=self)

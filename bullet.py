@@ -5,7 +5,7 @@ from random import randint
 
 
 class Bullets:
-    def __init__(self, bullet_group, alien_bullet_group, enemy_group, barrier_group, explosion_group, settings, aliens, stats, sb):
+    def __init__(self, bullet_group, alien_bullet_group, enemy_group, barrier_group, explosion_group, settings, aliens, stats, sb, barriers):
         self.bullets = bullet_group
         self.alien_bullets = alien_bullet_group
         self.alien_group = enemy_group
@@ -15,6 +15,9 @@ class Bullets:
         self.aliens = aliens
         self.stats = stats
         self.sb = sb
+        self.barriers = barriers
+        self.count = 0
+
 
     def add(self, settings, screen, ship):
         self.bullets.add(Bullet(settings=settings, screen=screen, ship=ship))
@@ -24,8 +27,10 @@ class Bullets:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+                # self.count -= 1
             elif bullet.gone:
                 self.bullets.remove(bullet)
+                # self.count -= 1
                 # self.alien_bullets.remove(alienBullet)
             for alienBullet in self.alien_bullets.copy():
                 if bullet.rect.colliderect(alienBullet):
@@ -34,6 +39,7 @@ class Bullets:
 
         collisions = pg.sprite.groupcollide(self.bullets, self.alien_group, True, False)
         if collisions:
+            # self.count -= 1
             for aliens in collisions.values():
                 for alien in aliens:
                     if not alien.dead:
@@ -42,8 +48,13 @@ class Bullets:
                         self.stats.score += self.settings.alien_points * len(aliens)
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
-        elif pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False):
-            print('hit')
+        collisions = pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False)
+        if collisions:
+            for barriers in collisions.values():
+                for barrier in barriers:
+                    barrier.health -= 1
+                    print('hit')
+            # self.count -= 1
         if len(self.alien_group) == 0:
             self.bullets.empty()
             self.alien_bullets.empty()
@@ -51,6 +62,8 @@ class Bullets:
             self.aliens.create_fleet()
             self.stats.level += 1
             self.sb.prep_level()
+            self.barriers.reset()
+            # self.count = 0
 
     def draw(self):
         for bullet in self.bullets.sprites():

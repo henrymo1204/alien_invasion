@@ -20,8 +20,18 @@ class Barriers:
 
         for i in range(3):
             barrier = Barrier(settings=settings, screen=screen, x=alien_width * (1.205 + 3 * i),
-                                  y=alien_height * 4.6)
+                                  y=alien_height * 5)
             self.allies.add(barrier)
+
+    def reset(self):
+        self.create_barriers()
+        for barrier in self.allies:
+            barrier.health = 5
+
+    def update(self):
+        for barrier in self.allies:
+            if barrier.health <= 0:
+                self.allies.remove(barrier)
 
     def draw(self):
         for ally in self.allies.sprites(): ally.draw()
@@ -41,6 +51,8 @@ class Barrier(Sprite):
 
         self.rect.x = self.x = x
         self.rect.y = self.y = y
+
+        self.health = 5
 
     def draw(self):
         # image = Alien.images[self.number]

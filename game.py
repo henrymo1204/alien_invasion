@@ -54,7 +54,7 @@ class Game:
         self.sb = Scoreboard(settings=self.settings, screen=self.screen, stats=self.stats, sound=self.sound)
 
         self.alienBullets = AlienBullets(bullet_group=alien_bullet_group, enemy_group=barrier_group, enemy_bullet_group=human_bullet_group,
-                                         settings=self.settings, ship_group=ship_group,
+                                         explosion_group=explosion_group, settings=self.settings, ship_group=ship_group,
                                          stats=self.stats, sb=self.sb, game=self)
         self.aliens = Aliens(settings=self.settings, screen=self.screen, alien_group=alien_group, explosion_group=explosion_group,
                              ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb, bullets=self.alienBullets)
@@ -64,7 +64,7 @@ class Game:
 
         self.bullets = Bullets(bullet_group=human_bullet_group, alien_bullet_group=alien_bullet_group,
                                enemy_group=alien_group, barrier_group=barrier_group, explosion_group=explosion_group,
-                               settings=self.settings, aliens=self.aliens, stats=self.stats, sb=self.sb)
+                               settings=self.settings, aliens=self.aliens, stats=self.stats, sb=self.sb, barriers=self.barrier)
         self.ship = Ship(screen=self.screen, settings=self.settings, bullets=self.bullets, sound=self.sound) # add ship group
         ship_group.add(self.ship)
         self.settings.init_dynamic_settings()
@@ -80,7 +80,7 @@ class Game:
                 self.bullets.update()
                 self.aliens.update()
                 self.alienBullets.update()
-                # self.barrier.update()
+                self.barrier.update()
             time.sleep(0.01)
 
             self.screen.fill(self.settings.bg_color)
@@ -105,6 +105,7 @@ class Game:
             self.aliens.create_fleet()
             self.bullets.bullets.empty()
             self.ship.center_ship()
+            self.barrier.reset()
             time.sleep(1)
         else:
             self.stats.game_active = False
