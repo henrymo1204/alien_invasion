@@ -6,14 +6,16 @@ from PIL import Image
 
 
 class Bullets:
-    def __init__(self, bullet_group, alien_bullet_group, enemy_group, barrier_group, explosion_group, settings, aliens, stats, sb, barriers):
+    def __init__(self, bullet_group, alien_bullet_group, enemy_group, ufo_group, barrier_group, explosion_group, settings, aliens, ufos, stats, sb, barriers):
         self.bullets = bullet_group
         self.alien_bullets = alien_bullet_group
         self.alien_group = enemy_group
+        self.ufo_group = ufo_group
         self.barrier_group = barrier_group
         self.explosion_group = explosion_group
         self.settings = settings
         self.aliens = aliens
+        self.ufos = ufos
         self.stats = stats
         self.sb = sb
         self.barriers = barriers
@@ -77,6 +79,18 @@ class Bullets:
 
                     barrier.health -= 1
             # self.count -= 1
+        collisions = pg.sprite.groupcollide(self.bullets, self.ufo_group, True, True)
+        if collisions:
+            # self.count -= 1
+            for ufos in collisions.values():
+                for ufo in ufos:
+                    print('ufo hit')
+                    # if not ufo.dead:
+                    #    ufo.dead = True
+                    #    self.explosion_group.add(ufo)
+                    #    self.stats.score += self.settings.ufo_points * len(ufos)
+                    #    self.sb.check_high_score(self.stats.score)
+                    #      self.sb.prep_score()
         if len(self.alien_group) == 0:
             self.bullets.empty()
             self.alien_bullets.empty()

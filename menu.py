@@ -105,6 +105,7 @@ class Intro:
         self.point_alien1 = Points(settings.bg_color, self.screen, '=   111', text_size=48)
         self.point_alien2 = Points(settings.bg_color, self.screen, '=   222', text_size=48)
         self.point_alien3 = Points(settings.bg_color, self.screen, '=   333', text_size=48)
+        self.point_alien4 = Points(settings.bg_color, self.screen, '=   444', text_size=48)
 
         self.prep_image()
 
@@ -130,6 +131,9 @@ class Intro:
         self.point_alien3.prep_image()
         self.point_alien3.image_rect.centerx = self.screen_rect.centerx + 50
         self.point_alien3.image_rect.top = self.subtitle.image_rect.bottom + 210
+        self.point_alien4.prep_image()
+        self.point_alien4.image_rect.centerx = self.screen_rect.centerx + 50
+        self.point_alien4.image_rect.top = self.subtitle.image_rect.bottom + 290
 
     def draw(self):
         """Draw the title to the screen"""
@@ -138,6 +142,7 @@ class Intro:
         self.point_alien1.draw()
         self.point_alien2.draw()
         self.point_alien3.draw()
+        self.point_alien4.draw()
 
 
 class MenuAliens:
