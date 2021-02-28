@@ -146,10 +146,9 @@ class Intro:
 
 
 class MenuAliens:
-    def __init__(self, settings, screen, menu_alien_group, explosion_group, ship_height, game, stats, sb, bullets=None):
+    def __init__(self, settings, screen, menu_alien_group, ship_height, game, stats, sb, bullets=None):
         self.settings = settings
         self.aliens = menu_alien_group
-        self.explosion_group = explosion_group
         self.screen = screen
         self.game = game
         self.ship_height = ship_height
@@ -199,17 +198,6 @@ class MenuAliens:
             # print("Resetting game")
             self.game.reset()
             return
-
-        collisions = pg.sprite.groupcollide(self.explosion_group, self.aliens, False, False)
-        if collisions:
-            for aliens in collisions.values():
-                for alien in aliens:
-                    if not alien.dead:
-                        alien.dead = True
-                        self.explosion_group.add(alien)
-                        self.stats.score += self.settings.alien_points * len(aliens)
-                        self.sb.check_high_score(self.stats.score)
-                        self.sb.prep_score()
 
         # for y in range(rows_per_screen):
         #     for x in range(aliens_per_row):

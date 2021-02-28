@@ -5,10 +5,9 @@ from random import randint
 
 
 class Aliens:
-    def __init__(self, settings, screen, alien_group, explosion_group, ship_height, game, stats, sb, bullets=None):
+    def __init__(self, settings, screen, alien_group, ship_height, game, stats, sb, bullets=None):
         self.settings = settings
         self.aliens = alien_group
-        self.explosion_group = explosion_group
         self.screen = screen
         self.game = game
         self.ship_height = ship_height
@@ -28,7 +27,7 @@ class Aliens:
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
                 #if y == 5:
-                alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.1 * x) - 200, y=alien_height * (1 * (1.2 + y)) +100, bullets=self.bullets, shooting=True)
+                alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.2 * x) - 200, y=alien_height * (1.2 * (1 + y)) +100, bullets=self.bullets, shooting=True)
                 # else:
                 #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
                 #                   y=alien_height * (1 + y), bullets=self.bullets)
@@ -74,17 +73,6 @@ class Aliens:
             self.game.reset()
             return
 
-        collisions = pg.sprite.groupcollide(self.explosion_group, self.aliens, False, False)
-        if collisions:
-            for aliens in collisions.values():
-                for alien in aliens:
-                    if not alien.dead and not alien.reallydead:
-                        alien.dead = True
-                        self.explosion_group.add(alien)
-                        self.stats.score += self.settings.alien_points
-                        self.sb.check_high_score(self.stats.score)
-                        self.sb.prep_score()
-
         # for y in range(rows_per_screen):
         #     for x in range(aliens_per_row):
         # row = 5
@@ -92,7 +80,6 @@ class Aliens:
             alien.update()
             if alien.rect.bottom <= 0 or alien.reallydead:
                 self.aliens.remove(alien)
-                self.explosion_group.remove(alien)
 
     def draw(self):
         for alien in self.aliens.sprites(): alien.draw()

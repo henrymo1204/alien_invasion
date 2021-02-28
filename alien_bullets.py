@@ -6,12 +6,11 @@ from PIL import Image
 
 
 class AlienBullets:
-    def __init__(self, bullet_group, enemy_group, enemy_bullet_group, ship_group, explosion_group, settings, stats, sb, game):
+    def __init__(self, bullet_group, enemy_group, enemy_bullet_group, ship_group, settings, stats, sb, game):
         self.bullets = bullet_group
         self.human_group = enemy_group
         self.human_bullet_group = enemy_bullet_group
         self.ship_group = ship_group
-        self.explosion_group = explosion_group
         self.settings = settings
         self.stats = stats
         self.sb = sb
@@ -34,7 +33,6 @@ class AlienBullets:
             self.game.ship.gone = False
             self.bullets.empty()
             self.human_bullet_group.empty()
-            self.explosion_group.empty()
             self.game.reset()
             return
         collisions = pg.sprite.groupcollide(self.bullets, self.human_group, True, False)

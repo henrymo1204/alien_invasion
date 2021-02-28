@@ -5,10 +5,9 @@ from random import randint
 
 
 class Ufos:
-    def __init__(self, settings, screen, ufo_group, explosion_group, ship_height, game, stats, sb, bullets=None):
+    def __init__(self, settings, screen, ufo_group, ship_height, game, stats, sb, bullets=None):
         self.settings = settings
         self.ufos = ufo_group
-        self.explosion_group = explosion_group
         self.screen = screen
         self.game = game
         self.ship_height = ship_height
@@ -93,17 +92,6 @@ class Ufos:
                 self.ufos.remove(ufo)
 
 
-        collisions = pg.sprite.groupcollide(self.explosion_group, self.ufos, False, True)
-        if collisions:
-            for ufos in collisions.values():
-                for ufo in ufos:
-                    if not ufo.dead:
-                        ufo.dead = True
-                        self.explosion_group.add(ufo)
-                        self.stats.score += self.settings.ufo_points * len(ufos)
-                        self.sb.check_high_score(self.stats.score)
-                        self.sb.prep_score()
-
         # for y in range(rows_per_screen):
         #     for x in range(aliens_per_row):
         # row = 5
@@ -111,7 +99,6 @@ class Ufos:
             ufo.update()
             if ufo.rect.bottom <= 0 or ufo.reallydead:
                 self.ufos.remove(ufo)
-                self.explosion_group.remove(ufo)
 
     def draw(self):
         for ufo in self.ufos.sprites(): ufo.draw()

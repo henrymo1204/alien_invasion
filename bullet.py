@@ -6,13 +6,12 @@ from PIL import Image
 
 
 class Bullets:
-    def __init__(self, bullet_group, alien_bullet_group, enemy_group, ufo_group, barrier_group, explosion_group, settings, aliens, ufos, stats, sb, barriers):
+    def __init__(self, bullet_group, alien_bullet_group, enemy_group, ufo_group, barrier_group, settings, aliens, ufos, stats, sb, barriers):
         self.bullets = bullet_group
         self.alien_bullets = alien_bullet_group
         self.alien_group = enemy_group
         self.ufo_group = ufo_group
         self.barrier_group = barrier_group
-        self.explosion_group = explosion_group
         self.settings = settings
         self.aliens = aliens
         self.ufos = ufos
@@ -47,7 +46,6 @@ class Bullets:
                 for alien in aliens:
                     if not alien.dead:
                         alien.dead = True
-                        self.explosion_group.add(alien)
                         self.stats.score += self.settings.alien_points
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
