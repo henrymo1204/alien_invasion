@@ -1,5 +1,5 @@
 from pygame.sprite import Sprite
-import pygame
+import pygame as pg
 from timer import Timer
 
 
@@ -19,18 +19,18 @@ class Barriers:
         alien_height = barriers.rect.height
 
         for i in range(3):
-            barrier = Barrier(settings=settings, screen=screen, x=alien_width * (1.205 + 3 * i),
-                                  y=alien_height * 5)
+            barrier = Barrier(settings=settings, screen=screen, x=alien_width * (1.205 + 3 * i), y=alien_height * 7)
             self.allies.add(barrier)
 
     def reset(self):
         self.create_barriers()
         for barrier in self.allies:
-            barrier.health = 5
+            barrier.health = 10
 
     def update(self):
         for barrier in self.allies:
-            if barrier.health <= 0:
+            barrier.update()
+            if barrier.gone:
                 self.allies.remove(barrier)
 
     def draw(self):
@@ -38,6 +38,10 @@ class Barriers:
 
 
 class Barrier(Sprite):
+    images_boom = [pg.image.load('images/barrier_explosion' + str(i) + '.png') for i in range(10)]
+
+    timer_boom = Timer(frames=images_boom, wait=100, looponce=True)
+
     def __init__(self, settings, screen, x=0, y=0):
         """Initialize the ship and set its starting position."""
         super().__init__()
@@ -45,19 +49,33 @@ class Barrier(Sprite):
         self.settings = settings
 
         # Load the ship image and get its rect.
-        self.image = pygame.image.load('images/temp2.png')
+        self.image = pg.image.load('images/barrier.png')
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
         self.rect.x = self.x = x
         self.rect.y = self.y = y
 
-        self.health = 5
+        self.health = 10
+        self.explode = False
+        self.timer = Barrier.timer_boom
+        self.gone = False
+
+    def update(self):
+        if self.health <= 0 and not self.explode:
+            self.explode = True
+        elif self.health <= 0 and self.explode:
+            if self.timer_boom.frame_index() == len(Barrier.images_boom) - 1:
+                self.gone = True
+                self.timer_boom.reset()
 
     def draw(self):
         # image = Alien.images[self.number]
         # self.screen.blit(image, self.rect)
-        image = self.image
+        if self.explode:
+            image = self.timer.imagerect()
+        else:
+            image = self.image
         rect = image.get_rect()
         rect.x, rect.y = self.rect.x, self.rect.y
         self.screen.blit(image, rect)

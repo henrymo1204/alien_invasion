@@ -99,7 +99,10 @@ class Aliens:
 
 
 class Alien(Sprite):   # INHERITS from SPRITE
-    images = [[pg.image.load('images/alien' + str(number) + str(i) + '.png') for i in range(2)] for number in range(3)]
+    images = [[pg.image.load('images/three_eye_alien' + str(i) + '.png') for i in range(8)],
+              [pg.image.load('images/two_eye_alien' + str(i) + '.png') for i in range(4)],
+              [pg.image.load('images/one_eye_alien' + str(i) + '.png') for i in range(4)]]
+
     images_boom = [pg.image.load('images/alien_explosion' + str(i) + '.png') for i in range(9)]
 
     timers = []
@@ -135,13 +138,16 @@ class Alien(Sprite):   # INHERITS from SPRITE
         self.x = float(self.rect.x)
         self.speed = speed
 
+        self.last_bullet_shot = pg.time.get_ticks()
+
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
         return r.right >= rscreen.right or r.left <= 0
 
     def update(self):
-        num = randint(0, 5000)
-        if self.shooting_bullets:
+        num = randint(0, 1000)
+        now = pg.time.get_ticks()
+        if now > self.last_bullet_shot + 5:
             if num == 1:
                 self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
         if self.dead and not self.timer_switched:

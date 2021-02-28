@@ -2,6 +2,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 from random import randint
 import time
+from PIL import Image
 
 
 class AlienBullets:
@@ -40,8 +41,29 @@ class AlienBullets:
         if collisions:
             for barriers in collisions.values():
                 for barrier in barriers:
+                    pil_image = pg.image.tostring(barrier.image, 'RGBA', False)
+                    img = Image.frombytes('RGBA', (128, 98), pil_image)
+                    img = img.convert('RGBA')
+                    datas = img.getdata()
+
+                    newData = []
+                    for item in datas:
+                        num = randint(0, 5)
+                        if num == 1:
+                            newData.append((255, 255, 255, 0))
+                        else:
+                            newData.append(item)
+                    img.putdata(newData)
+
+                    mode = img.mode
+                    size = img.size
+                    data = img.tobytes()
+
+                    py_image = pg.image.fromstring(data, size, mode)
+
+                    barrier.image = py_image
+
                     barrier.health -= 1
-                    print('hit')
         # if len(self.alien_group) == 0:
         #     self.bullets.empty()
         #     self.settings.increase_speed()

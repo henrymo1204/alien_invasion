@@ -12,7 +12,7 @@ from scoreboard import Scoreboard
 from sound import Sound
 from alien_bullets import AlienBullets
 from barrier import Barriers
-
+from menu import MenuAliens
 import time
 
 from vector import Vector
@@ -40,6 +40,7 @@ class Game:
     def restart(self):
         self.play_button = Button(settings=self.settings, screen=self.screen, msg="Play")
 
+        menu_alien_group = Group()
         alien_group = Group()  # group of aliens
         barrier_group = Group()  # group of barriers
 
@@ -58,6 +59,11 @@ class Game:
                                          stats=self.stats, sb=self.sb, game=self)
         self.aliens = Aliens(settings=self.settings, screen=self.screen, alien_group=alien_group, explosion_group=explosion_group,
                              ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb, bullets=self.alienBullets)
+
+        self.menu_aliens = MenuAliens(settings=self.settings, screen=self.screen, menu_alien_group=menu_alien_group,
+                                      explosion_group=explosion_group,
+                                      ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
+                                      bullets=self.alienBullets)
 
         self.barrier = Barriers(settings=self.settings, screen=self.screen, ally_group=barrier_group,
                                 ship_height=self.ship_height, game=self)
@@ -81,18 +87,24 @@ class Game:
                 self.aliens.update()
                 self.alienBullets.update()
                 self.barrier.update()
-            time.sleep(0.01)
+                time.sleep(0.01)
 
-            self.screen.fill(self.settings.bg_color)
-            self.ship.draw()
-            self.bullets.draw()
-            self.aliens.draw()
-            self.alienBullets.draw()
-            self.barrier.draw()
-            self.sb.show_score()
+                self.screen.fill(self.settings.bg_color)
+                self.ship.draw()
+                self.bullets.draw()
+                self.aliens.draw()
+                self.alienBullets.draw()
+                self.barrier.draw()
+                self.sb.show_score()
             if not self.stats.game_active:
                 self.play_button.draw()
                 self.sound.pause_bg()
+                # self.menu_aliens.draw()
+                quit_game = not gf.startup_screen(settings=self.settings, stats=self.stats, screen=self.screen,
+                                                  menu_aliens=self.menu_aliens)
+                if quit_game:
+                    pg.quit()
+                    break
             else:
                 if not self.sound.playing_bg: self.sound.unpause_bg()
             pg.display.flip()
@@ -110,7 +122,7 @@ class Game:
         else:
             self.stats.game_active = False
             self.sound.pause_bg()
-            self.hs = self.stats.high_score
+            self.stats.save_high_score()
             self.restart()
 
 
