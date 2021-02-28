@@ -28,7 +28,7 @@ class Aliens:
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
                 #if y == 5:
-                alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x), y=alien_height * (1 + y), bullets=self.bullets, shooting=True)
+                alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x), y=alien_height * (1.5 * (1 + y)), bullets=self.bullets, shooting=True)
                 # else:
                 #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
                 #                   y=alien_height * (1 + y), bullets=self.bullets)
@@ -78,10 +78,10 @@ class Aliens:
         if collisions:
             for aliens in collisions.values():
                 for alien in aliens:
-                    if not alien.dead:
+                    if not alien.dead and not alien.reallydead:
                         alien.dead = True
                         self.explosion_group.add(alien)
-                        self.stats.score += self.settings.alien_points * len(aliens)
+                        self.stats.score += self.settings.alien_points
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
 

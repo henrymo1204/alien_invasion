@@ -46,7 +46,7 @@ class Bullets:
                     if not alien.dead:
                         alien.dead = True
                         self.explosion_group.add(alien)
-                        self.stats.score += self.settings.alien_points * len(aliens)
+                        self.stats.score += self.settings.alien_points
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
         collisions = pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False)
