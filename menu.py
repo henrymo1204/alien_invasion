@@ -163,11 +163,7 @@ class MenuAliens:
 
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
-<<<<<<< HEAD
                 alien = Alien(settings=settings, screen=screen, number=y, x=alien_width * (4 + 1.5 * x), y=alien_height * (1.4 * (1 + y)), bullets=self.bullets, shooting=True)
-=======
-                alien = Alien(settings=settings, screen=screen, number=y, x=alien_width * (4 + 1.5 * x), y=alien_height * (1 + y), bullets=self.bullets, shooting=True)
->>>>>>> fe6cd8de8eb1d98e278187c79f098474840bc062
                 self.aliens.add(alien)
 
     def add(self, alien): self.aliens.add(alien)
@@ -224,13 +220,9 @@ class MenuAliens:
 
 
 class Alien(Sprite):   # INHERITS from SPRITE
-<<<<<<< HEAD
     images = [[pg.image.load('images/three_eye_alien' + str(i) + '.png') for i in range(8)],
               [pg.image.load('images/two_eye_alien' + str(i) + '.png') for i in range(4)],
               [pg.image.load('images/one_eye_alien' + str(i) + '.png') for i in range(4)]]
-=======
-    images = [[pg.image.load('images/alien' + str(number) + str(i) + '.png') for i in range(2)] for number in range(3)]
->>>>>>> fe6cd8de8eb1d98e278187c79f098474840bc062
 
     timers = []
     for i in range(3):
