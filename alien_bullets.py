@@ -79,7 +79,7 @@ class Bullet(Sprite):
     def __init__(self, settings, screen, ship):
         super().__init__()
         self.screen = screen
-        self.rect = pg.Rect(0, 0, settings.bullet_width, settings.bullet_height)
+        self.rect = pg.Rect(0, 0, settings.bullet_width + 5, settings.bullet_height)
         self.rect.centerx = ship.rect.centerx
         self.rect.bottom = ship.rect.bottom
         self.y = float(self.rect.y)

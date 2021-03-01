@@ -94,6 +94,7 @@ class Bullets:
         if len(self.alien_group) == 0:
             self.bullets.empty()
             self.alien_bullets.empty()
+            self.ufo_group.empty()
             self.settings.increase_speed()
             self.aliens.create_fleet()
             self.stats.level += 1
