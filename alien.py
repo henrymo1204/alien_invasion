@@ -26,12 +26,11 @@ class Aliens:
 
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
-                #if y == 5:
-                alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.2 * x) - 200, y=alien_height * (1.2 * (1 + y)) +100, bullets=self.bullets, shooting=True)
-                # else:
-                #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
-                #                   y=alien_height * (1 + y), bullets=self.bullets)
-                # alien = Alien(settings=settings, screen=screen, x=alien_width * (1 + 2 * x), y=alien_height * (1 + 2 * y))
+                if y == 5:
+                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.2 * (2 + x)), y=alien_height * (1.3 * (2 + y)), bullets=self.bullets, shooting=True, row=x, column=y)
+                else:
+                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.2 * (2 + x)),
+                                  y=alien_height * (1.3 * (2 + y)), bullets=self.bullets, row=x, column=y)
                 self.aliens.add(alien)
 
     def aliens_per_row(self, settings, alien_width):
@@ -96,7 +95,7 @@ class Alien(Sprite):   # INHERITS from SPRITE
     for i in range(3):
         timers.append(Timer(frames=images[i], wait=700))
 
-    def __init__(self, settings, screen, number=0, x=0, y=0, speed=0, bullets=None, shooting=False):
+    def __init__(self, settings, screen, number=0, x=0, y=0, speed=0, bullets=None, shooting=False, row=0, column=0):
         super().__init__()
         self.screen = screen
         self.settings = settings
@@ -127,21 +126,25 @@ class Alien(Sprite):   # INHERITS from SPRITE
 
         self.last_bullet_shot = None
 
+        self.row = row
+        self.column = column
+
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
         return r.right >= rscreen.right or r.left <= 0
 
     def update(self):
-        num = randint(20000, 25000)
-        now = pg.time.get_ticks()
-        if self.last_bullet_shot is None:
-            num = randint(0, 1000)
-            if num == 1:
+        if self.shooting_bullets:
+            num = randint(20000, 25000)
+            now = pg.time.get_ticks()
+            if self.last_bullet_shot is None:
+                num = randint(0, 1000)
+                if num == 1:
+                    self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
+                    self.last_bullet_shot = pg.time.get_ticks()
+            elif now > self.last_bullet_shot + num:
                 self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
                 self.last_bullet_shot = pg.time.get_ticks()
-        elif now > self.last_bullet_shot + num:
-            self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
-            self.last_bullet_shot = pg.time.get_ticks()
         if self.dead and not self.timer_switched:
             self.timer = Timer(frames=Alien.images_boom, wait=100, looponce=True)
             self.timer_switched = True

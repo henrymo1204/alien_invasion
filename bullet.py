@@ -46,9 +46,11 @@ class Bullets:
                 for alien in aliens:
                     if not alien.dead:
                         alien.dead = True
+                        self.next(alien)
                         self.stats.score += self.settings.alien_points
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
+
         collisions = pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False)
         if collisions:
             for barriers in collisions.values():
@@ -98,6 +100,11 @@ class Bullets:
             self.sb.prep_level()
             self.barriers.reset()
             # self.count = 0
+
+    def next(self, alien):
+        for i in self.alien_group:
+            if i.row == alien.row and i.column == alien.column - 1:
+                i.shooting_bullets = True
 
     def draw(self):
         for bullet in self.bullets.sprites():
