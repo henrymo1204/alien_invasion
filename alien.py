@@ -27,10 +27,10 @@ class Aliens:
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
                 if y == 5:
-                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.2 * (2 + x)), y=alien_height * (1.3 * (2 + y)), bullets=self.bullets, shooting=True, row=x, column=y)
+                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.5 * (2 + x)), y=alien_height * (1.5 * (2 + y)), bullets=self.bullets, shooting=True, row=x, column=y)
                 else:
-                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.2 * (2 + x)),
-                                  y=alien_height * (1.3 * (2 + y)), bullets=self.bullets, row=x, column=y)
+                    alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (1.5 * (2 + x)),
+                                  y=alien_height * (1.5 * (2 + y)), bullets=self.bullets, row=x, column=y)
                 self.aliens.add(alien)
 
     def aliens_per_row(self, settings, alien_width):

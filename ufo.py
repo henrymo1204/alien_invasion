@@ -25,36 +25,38 @@ class Ufos:
         ufos_per_row = 1
         rows_per_screen = 1
 
-        #now = pg.time.get_ticks()%30000
-        #(now%15000)
+        # now = pg.time.get_ticks()%30000
+        # (now%15000)
         for y in range(rows_per_screen):
             for x in range(ufos_per_row):
                 # if y == 5:
-                ufo = Ufo(settings=settings, screen=screen, number=y // 2, x=ufo_width * (4 + 1.5 * x), y=ufo_height * (1 + y), bullets=self.bullets, shooting=True)
+                ufo = Ufo(settings=settings, screen=screen, number=y // 2, x=ufo_width * (4 + 1.5 * x),
+                          y=ufo_height * (1 + y), bullets=self.bullets, shooting=True)
                 # else:
                 #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
                 #                   y=alien_height * (1 + y), bullets=self.bullets)
                 # alien = Alien(settings=settings, screen=screen, x=alien_width * (1 + 2 * x), y=alien_height * (1 + 2 * y))
                 self.ufos.add(ufo)
 
-
-    #def ufos_per_row(self, settings, alien_width): return 1
+    # def ufos_per_row(self, settings, alien_width): return 1
     #    space_x = settings.screen_width - 2 * alien_width
     #    return int(space_x / (2 * alien_width))
 
-    #def rows_per_screen(self, settings, alien_height): return 1
-        # space_y = settings.screen_height - (alien_height) - self.ship_height
-        # # space_y = settings.screen_height - (3 * alien_height) - self.ship_height
-        # return int(space_y / (alien_height))
-        # # return int(space_y / (2 * alien_height))
+    # def rows_per_screen(self, settings, alien_height): return 1
+    # space_y = settings.screen_height - (alien_height) - self.ship_height
+    # # space_y = settings.screen_height - (3 * alien_height) - self.ship_height
+    # return int(space_y / (alien_height))
+    # # return int(space_y / (2 * alien_height))
 
-    def add(self, ufo): self.ufos.add(ufo)
+    def add(self, ufo):
+        self.ufos.add(ufo)
 
-    def remove(self, ufo): self.ufos.ufos.remove(ufo)
+    def remove(self, ufo):
+        self.ufos.ufos.remove(ufo)
 
     def change_direction(self):
-    #    for alien in self.aliens:
-    #        alien.rect.y += self.settings.fleet_drop_speed
+        #    for alien in self.aliens:
+        #        alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
     def check_edges(self):
@@ -62,7 +64,7 @@ class Ufos:
             if ufo.check_edges(): return True
         return False
 
-    #def check_aliens_bottom(self):
+    # def check_aliens_bottom(self):
     #    r = self.screen.get_rect()
     #    for alien in self.aliens.sprites():
     #        if alien.rect.bottom > r.bottom:
@@ -71,7 +73,6 @@ class Ufos:
 
     def update(self):
         self.ufos.update()
-        print(pg.time.get_ticks())
         num = randint(30000, 35000)
         now = pg.time.get_ticks()
         if self.last_bullet_shot is None:
@@ -83,14 +84,10 @@ class Ufos:
             self.create_fleet()
             self.last_bullet_shot = pg.time.get_ticks()
 
-
-
-
         if self.check_edges():
             for ufo in self.ufos.copy():
                 ufo.update()
                 self.ufos.remove(ufo)
-
 
         # for y in range(rows_per_screen):
         #     for x in range(aliens_per_row):
@@ -104,7 +101,7 @@ class Ufos:
         for ufo in self.ufos.sprites(): ufo.draw()
 
 
-class Ufo(Sprite):   # INHERITS from SPRITE
+class Ufo(Sprite):  # INHERITS from SPRITE
     images = [[pg.image.load('images/ufo' + str(i) + '.png') for i in range(2)]]
     images_boom = [pg.image.load('images/alien_explosion' + str(i) + '.png') for i in range(9)]
 
@@ -147,8 +144,8 @@ class Ufo(Sprite):   # INHERITS from SPRITE
 
     def update(self):
 
-        #num = randint(0, 5000)
-        #if self.shooting_bullets:
+        # num = randint(0, 5000)
+        # if self.shooting_bullets:
         #    if num == 1:
         #        self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
         if self.dead and not self.timer_switched:
