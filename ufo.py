@@ -15,28 +15,25 @@ class Ufos:
         self.stats = stats
         self.sb = sb
 
-        self.last_bullet_shot = None
+        self.last_UFO_appeared = None
 
     def create_fleet(self):
         settings, screen = self.settings, self.screen
-        ufo = Ufo(settings=settings, screen=self.screen)
-        ufo_width = ufo.rect.width
-        ufo_height = ufo.rect.height
+        ufos = Ufo(settings=settings, screen=self.screen)
+        ufo_width = ufos.rect.width
+        ufo_height = ufos.rect.height
         ufos_per_row = 1
         rows_per_screen = 1
 
         # now = pg.time.get_ticks()%30000
         # (now%15000)
-        for y in range(rows_per_screen):
-            for x in range(ufos_per_row):
-                # if y == 5:
-                ufo = Ufo(settings=settings, screen=screen, number=y // 2, x=ufo_width * (4 + 1.5 * x),
-                          y=ufo_height * (1 + y), bullets=self.bullets, shooting=True)
+        x = y = 0
+        ufo = Ufo(settings=settings, screen=screen, number=y // 2, bullets=self.bullets, shooting=True)
                 # else:
                 #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
                 #                   y=alien_height * (1 + y), bullets=self.bullets)
                 # alien = Alien(settings=settings, screen=screen, x=alien_width * (1 + 2 * x), y=alien_height * (1 + 2 * y))
-                self.ufos.add(ufo)
+        self.ufos.add(ufo)
 
     # def ufos_per_row(self, settings, alien_width): return 1
     #    space_x = settings.screen_width - 2 * alien_width
@@ -73,16 +70,16 @@ class Ufos:
 
     def update(self):
         self.ufos.update()
-        num = randint(30000, 35000)
+        num = randint(15000, 25000)
         now = pg.time.get_ticks()
-        if self.last_bullet_shot is None:
+        if self.last_UFO_appeared is None:
             num = randint(0, 1000)
             if num == 1:
                 self.create_fleet()
-                self.last_bullet_shot = pg.time.get_ticks()
-        elif now > self.last_bullet_shot + num:
+                self.last_UFO_appeared = pg.time.get_ticks()
+        elif now > self.last_UFO_appeared + num:
             self.create_fleet()
-            self.last_bullet_shot = pg.time.get_ticks()
+            self.last_UFO_appeared = pg.time.get_ticks()
 
         if self.check_edges():
             for ufo in self.ufos.copy():
@@ -94,8 +91,6 @@ class Ufos:
         # row = 5
         for ufo in self.ufos.copy():
             ufo.update()
-            if ufo.rect.bottom <= 0 or ufo.reallydead:
-                self.ufos.remove(ufo)
 
     def draw(self):
         for ufo in self.ufos.sprites(): ufo.draw()
@@ -109,7 +104,7 @@ class Ufo(Sprite):  # INHERITS from SPRITE
     for i in range(1):
         timers.append(Timer(frames=images[i], wait=700))
 
-    def __init__(self, settings, screen, number=0, x=1, y=0, speed=0, bullets=None, shooting=False):
+    def __init__(self, settings, screen, number=0, speed=0, bullets=None, shooting=False):
         super().__init__()
         self.screen = screen
         self.settings = settings
