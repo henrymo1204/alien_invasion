@@ -4,8 +4,10 @@ from pygame.sysfont import SysFont
 from pygame.sprite import Sprite
 from timer import Timer
 
+
 class Button:
     """Represents a click-able button style text, with altering text color"""
+
     def __init__(self, settings, screen, msg, y_factor=0.65):
         self.settings = settings
         self.screen = screen
@@ -51,6 +53,7 @@ class Button:
 
 class Title:
     """Represents the title text to be displayed on screen"""
+
     def __init__(self, bg_color, screen, text, text_size=56, text_color=(255, 255, 255)):
         self.bg_color = bg_color
         self.screen = screen
@@ -72,6 +75,7 @@ class Title:
 
 class Points:
     """Represents the subtitle text displayed on screen"""
+
     def __init__(self, bg_color, screen, text, text_size=48, text_color=(255, 255, 255)):
         self.bg_color = bg_color
         self.screen = screen
@@ -90,8 +94,10 @@ class Points:
         """Draw the subtitle's image to the screen"""
         self.screen.blit(self.image, self.image_rect)
 
+
 class Intro:
     """Contains information and methods relating to the start menu"""
+
     def __init__(self, settings, stats, screen):
         # settings, settings, stats
         self.settings = settings
@@ -167,12 +173,15 @@ class MenuAliens:
 
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
-                alien = Alien(settings=settings, screen=screen, number=y, x=alien_width * (4 + 1.5 * x), y=alien_height * (1.4 * (1 + y)), bullets=self.bullets, shooting=True)
+                alien = Alien(settings=settings, screen=screen, number=y, x=alien_width * (4 + 1.5 * x),
+                              y=alien_height * (1.4 * (1 + y)), bullets=self.bullets, shooting=True)
                 self.aliens.add(alien)
 
-    def add(self, alien): self.aliens.add(alien)
+    def add(self, alien):
+        self.aliens.add(alien)
 
-    def remove(self, alien): self.aliens.aliens.remove(alien)
+    def remove(self, alien):
+        self.aliens.aliens.remove(alien)
 
     def change_direction(self):
         for alien in self.aliens:
@@ -206,13 +215,12 @@ class MenuAliens:
             alien.update()
             if alien.rect.bottom <= 0 or alien.reallydead:
                 self.aliens.remove(alien)
-                self.explosion_group.remove(alien)
 
     def draw(self):
         for alien in self.aliens.sprites(): alien.draw()
 
 
-class Alien(Sprite):   # INHERITS from SPRITE
+class Alien(Sprite):  # INHERITS from SPRITE
     images = [[pg.image.load('images/three_eye_alien' + str(i) + '.png') for i in range(8)],
               [pg.image.load('images/two_eye_alien' + str(i) + '.png') for i in range(4)],
               [pg.image.load('images/one_eye_alien' + str(i) + '.png') for i in range(4)]]
@@ -248,22 +256,6 @@ class Alien(Sprite):   # INHERITS from SPRITE
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
         return r.right >= rscreen.right or r.left <= 0
-
-    def update(self):
-        if self.dead and not self.timer_switched:
-            self.timer = Timer(frames=Alien.images_boom, wait=100, looponce=True)
-            self.timer_switched = True
-        elif self.dead and self.timer_switched:
-            # print("switched to boom timer", self.timer_boom.frame_index(), len(Alien.images_boom))
-            if self.timer.frame_index() == len(Alien.images_boom) - 1:
-                self.dead = False
-                self.timer_switched = False
-                self.reallydead = True
-                self.timer.reset()
-        if not self.timer_switched:
-            delta = self.settings.alien_speed * self.settings.fleet_direction
-            self.rect.x += delta
-            self.x = self.rect.x
 
     def draw(self):
         # image = Alien.images[self.number]

@@ -5,7 +5,7 @@ from pygame.sprite import Group
 
 from bullet import Bullets
 from ship import Ship
-from alien import Aliens, Alien
+from alien import Aliens
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
@@ -13,8 +13,9 @@ from sound import Sound
 from alien_bullets import AlienBullets
 from barrier import Barriers
 from menu import MenuAliens
-from ufo import Ufo, Ufos
+from ufo import Ufos
 import time
+import wave
 
 from vector import Vector
 from quaternion import Quaternion
@@ -31,7 +32,7 @@ class Game:
         self.ship_height = ship_image.get_rect().height
         self.hs = 0
         self.sound = Sound(bg_music="sounds/startrek_louder.wav")
-        self.sound = Sound(bg_music="sounds/startrektheme.wav")
+        # self.sound = Sound(bg_music="sounds/startrektheme.wav")
         # self.sound = Sound(bg_music="sounds/beepbeepmusic.wav")
         self.sound.play()
         self.sound.pause_bg()
@@ -51,15 +52,16 @@ class Game:
 
         ship_group = Group()
 
-
         self.stats = GameStats(settings=self.settings)
         self.sb = Scoreboard(settings=self.settings, screen=self.screen, stats=self.stats, sound=self.sound)
 
-        self.alienBullets = AlienBullets(bullet_group=alien_bullet_group, enemy_group=barrier_group, enemy_bullet_group=human_bullet_group,
+        self.alienBullets = AlienBullets(bullet_group=alien_bullet_group, enemy_group=barrier_group,
+                                         enemy_bullet_group=human_bullet_group,
                                          settings=self.settings, ship_group=ship_group,
                                          stats=self.stats, sb=self.sb, game=self)
         self.aliens = Aliens(settings=self.settings, screen=self.screen, alien_group=alien_group,
-                             ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb, bullets=self.alienBullets)
+                             ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
+                             bullets=self.alienBullets)
 
         self.ufos = Ufos(settings=self.settings, screen=self.screen, ufo_group=ufo_group,
                          ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
@@ -74,8 +76,10 @@ class Game:
 
         self.bullets = Bullets(bullet_group=human_bullet_group, alien_bullet_group=alien_bullet_group,
                                enemy_group=alien_group, ufo_group=ufo_group, barrier_group=barrier_group,
-                               settings=self.settings, aliens=self.aliens, ufos=self.ufos, stats=self.stats, sb=self.sb, barriers=self.barrier)
-        self.ship = Ship(screen=self.screen, settings=self.settings, bullets=self.bullets, sound=self.sound) # add ship group
+                               settings=self.settings, aliens=self.aliens, ufos=self.ufos, stats=self.stats, sb=self.sb,
+                               barriers=self.barrier)
+        self.ship = Ship(screen=self.screen, settings=self.settings, bullets=self.bullets,
+                         sound=self.sound)  # add ship group
         ship_group.add(self.ship)
         self.settings.init_dynamic_settings()
         self.stats.high_score = self.hs

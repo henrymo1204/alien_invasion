@@ -6,7 +6,8 @@ from PIL import Image
 
 
 class Bullets:
-    def __init__(self, bullet_group, alien_bullet_group, enemy_group, ufo_group, barrier_group, settings, aliens, ufos, stats, sb, barriers):
+    def __init__(self, bullet_group, alien_bullet_group, enemy_group, ufo_group, barrier_group, settings, aliens, ufos,
+                 stats, sb, barriers):
         self.bullets = bullet_group
         self.alien_bullets = alien_bullet_group
         self.alien_group = enemy_group
@@ -19,7 +20,6 @@ class Bullets:
         self.sb = sb
         self.barriers = barriers
         self.count = 0
-
 
     def add(self, settings, screen, ship):
         self.bullets.add(Bullet(settings=settings, screen=screen, ship=ship))
@@ -143,7 +143,6 @@ class Bullet(Sprite):
         else:
             self.y -= self.speed_factor
             self.rect.y = self.y
-
 
     def draw(self):
         if self.collide:
