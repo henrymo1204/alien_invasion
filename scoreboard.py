@@ -42,7 +42,7 @@ class Scoreboard():
         self.high_score_rect = self.high_score_image.get_rect()
         self.high_score_rect.centerx = self.screen_rect.centerx
         self.high_score_rect.top = self.score_rect.top
-        print('high_score', high_score_str)
+        #print('high_score', high_score_str)
 
     def prep_level(self):
         self.level_image = self.font.render(str(self.stats.level), True, self.text_color,

@@ -59,7 +59,7 @@ class Bullets:
             # self.count -= 1
             for ufos in collisions.values():
                 for ufo in ufos:
-                    print('ufo hit')
+                    #print('ufo hit')
                     if not ufo.dead:
                         ufo.dead = True
                         self.stats.score += ufo.score

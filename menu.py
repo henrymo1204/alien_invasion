@@ -111,7 +111,7 @@ class Intro:
         self.point_alien1 = Points(settings.bg_color, self.screen, '=   111', text_size=48)
         self.point_alien2 = Points(settings.bg_color, self.screen, '=   222', text_size=48)
         self.point_alien3 = Points(settings.bg_color, self.screen, '=   333', text_size=48)
-        self.point_alien4 = Points(settings.bg_color, self.screen, '=   444', text_size=48)
+        self.point_alien4 = Points(settings.bg_color, self.screen, '=    ?   ', text_size=48)
 
         self.prep_image()
 

@@ -16,6 +16,8 @@ class Ufos:
         self.sb = sb
         self.last_UFO_appeared = None
 
+        """SPAWNED FOR TESTING""" # delete after
+        self.create_fleet()
 
 
     def create_fleet(self):
@@ -29,6 +31,7 @@ class Ufos:
         # now = pg.time.get_ticks()%30000
         # (now%15000)
         x = y = 0
+        Ufo.images_boom.clear()
         ufo = Ufo(settings=settings, screen=screen, number=y // 2, bullets=self.bullets, shooting=True)
         ufo.append_score()
         self.ufos.add(ufo)
@@ -45,7 +48,9 @@ class Ufos:
 
     def check_edges(self):
         for ufo in self.ufos:
-            if ufo.check_edges(): return True
+            if ufo.check_edges():
+                Ufo.images_boom.clear()
+                return True
         return False
 
     def update(self):
@@ -105,13 +110,16 @@ class Ufo(Sprite):  # INHERITS from SPRITE
         # self.timer = Timer(frames=self.frames, wait=700)
         self.rect = self.timer.imagerect().get_rect()
 
-        self.rect.x = self.x = 10
+        self.ufo_direction = self.settings.ufo_fleet_direction * (choice([-1, 1]))
+
+
+        self.rect.x = self.x = 0 if self.ufo_direction > 0 else settings.screen_width - 80
         self.rect.y = self.y = 630 # TESTING normal value 10
         # self.rect.x = self.rect.width
         # self.rect.y = self.rect.height
 
         self.x = float(self.rect.x)
-        self.speed = speed
+
 
         self.score = None
         self.possible_ufo_points = [500, 1000, 1500, 2000]
@@ -135,11 +143,11 @@ class Ufo(Sprite):  # INHERITS from SPRITE
         elif score == 2000:
             Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
             Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
-        print('append', score)
+        print('appended ', score)
 
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
-        return r.right >= rscreen.right or r.left <= 0
+        return r.right > rscreen.right or r.left < 0
 
     def update(self):
         if self.dead and not self.timer_switched:
@@ -154,9 +162,10 @@ class Ufo(Sprite):  # INHERITS from SPRITE
                 self.timer.reset()
                 Ufo.images_boom.clear()
         if not self.timer_switched:
-            delta = self.settings.ufo_speed * self.settings.ufo_fleet_direction
+            delta = self.settings.ufo_speed * self.ufo_direction
             self.rect.x += delta
             self.x = self.rect.x
+            #print(delta)
 
     def draw(self):
         # image = Ufo.images[self.number]
