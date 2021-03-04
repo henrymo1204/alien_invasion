@@ -16,7 +16,6 @@ class Ufos:
         self.sb = sb
         self.last_UFO_appeared = None
 
-        self.create_fleet()
 
 
     def create_fleet(self):
