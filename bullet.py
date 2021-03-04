@@ -39,6 +39,9 @@ class Bullets:
                     bullet.collide = True
                     alienBullet.gone = True
 
+
+
+
         collisions = pg.sprite.groupcollide(self.bullets, self.alien_group, True, False)
         if collisions:
             # self.count -= 1
@@ -50,6 +53,21 @@ class Bullets:
                         self.stats.score += self.settings.alien_points
                         self.sb.check_high_score(self.stats.score)
                         self.sb.prep_score()
+
+        collisions = pg.sprite.groupcollide(self.bullets, self.ufo_group, True, False)
+        if collisions:
+            # self.count -= 1
+            for ufos in collisions.values():
+                for ufo in ufos:
+                    print('ufo hit')
+                    if not ufo.dead:
+                        ufo.dead = True
+                        self.stats.score += ufo.score
+                        self.sb.check_high_score(self.stats.score)
+                        self.sb.prep_score()
+
+
+
 
         collisions = pg.sprite.groupcollide(self.bullets, self.barrier_group, True, False)
         if collisions:
@@ -79,18 +97,7 @@ class Bullets:
 
                     barrier.health -= 1
             # self.count -= 1
-        collisions = pg.sprite.groupcollide(self.bullets, self.ufo_group, True, True)
-        if collisions:
-            # self.count -= 1
-            for ufos in collisions.values():
-                for ufo in ufos:
-                    print('ufo hit')
-                    # if not ufo.dead:
-                    #    ufo.dead = True
-                    #    self.explosion_group.add(ufo)
-                    #    self.stats.score += self.settings.ufo_points * len(ufos)
-                    #    self.sb.check_high_score(self.stats.score)
-                    #      self.sb.prep_score()
+
         if len(self.alien_group) == 0:
             self.bullets.empty()
             self.alien_bullets.empty()

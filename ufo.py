@@ -1,7 +1,7 @@
 import pygame as pg
 from pygame.sprite import Sprite
 from timer import Timer
-from random import randint
+from random import randint, choice
 
 
 class Ufos:
@@ -14,8 +14,10 @@ class Ufos:
         self.bullets = bullets
         self.stats = stats
         self.sb = sb
-
         self.last_UFO_appeared = None
+
+        self.create_fleet()
+
 
     def create_fleet(self):
         settings, screen = self.settings, self.screen
@@ -29,21 +31,9 @@ class Ufos:
         # (now%15000)
         x = y = 0
         ufo = Ufo(settings=settings, screen=screen, number=y // 2, bullets=self.bullets, shooting=True)
-                # else:
-                #     alien = Alien(settings=settings, screen=screen, number=y // 2, x=alien_width * (4 + 1.5 * x),
-                #                   y=alien_height * (1 + y), bullets=self.bullets)
-                # alien = Alien(settings=settings, screen=screen, x=alien_width * (1 + 2 * x), y=alien_height * (1 + 2 * y))
+        ufo.append_score()
         self.ufos.add(ufo)
 
-    # def ufos_per_row(self, settings, alien_width): return 1
-    #    space_x = settings.screen_width - 2 * alien_width
-    #    return int(space_x / (2 * alien_width))
-
-    # def rows_per_screen(self, settings, alien_height): return 1
-    # space_y = settings.screen_height - (alien_height) - self.ship_height
-    # # space_y = settings.screen_height - (3 * alien_height) - self.ship_height
-    # return int(space_y / (alien_height))
-    # # return int(space_y / (2 * alien_height))
 
     def add(self, ufo):
         self.ufos.add(ufo)
@@ -52,21 +42,12 @@ class Ufos:
         self.ufos.ufos.remove(ufo)
 
     def change_direction(self):
-        #    for alien in self.aliens:
-        #        alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
     def check_edges(self):
         for ufo in self.ufos:
             if ufo.check_edges(): return True
         return False
-
-    # def check_aliens_bottom(self):
-    #    r = self.screen.get_rect()
-    #    for alien in self.aliens.sprites():
-    #        if alien.rect.bottom > r.bottom:
-    #           return True
-    #   return False
 
     def update(self):
         self.ufos.update()
@@ -86,19 +67,19 @@ class Ufos:
                 ufo.update()
                 self.ufos.remove(ufo)
 
-        # for y in range(rows_per_screen):
-        #     for x in range(aliens_per_row):
-        # row = 5
         for ufo in self.ufos.copy():
             ufo.update()
+            if ufo.reallydead:
+                self.ufos.remove(ufo)
 
     def draw(self):
         for ufo in self.ufos.sprites(): ufo.draw()
 
 
+
 class Ufo(Sprite):  # INHERITS from SPRITE
     images = [[pg.image.load('images/ufo' + str(i) + '.png') for i in range(2)]]
-    images_boom = [pg.image.load('images/alien_explosion' + str(i) + '.png') for i in range(9)]
+    images_boom = []
 
     timers = []
     for i in range(1):
@@ -126,33 +107,53 @@ class Ufo(Sprite):  # INHERITS from SPRITE
         self.rect = self.timer.imagerect().get_rect()
 
         self.rect.x = self.x = 10
-        self.rect.y = self.y = settings.screen_height * 0.1
+        self.rect.y = self.y = 630 # TESTING normal value 10
         # self.rect.x = self.rect.width
         # self.rect.y = self.rect.height
 
         self.x = float(self.rect.x)
         self.speed = speed
 
+        self.score = None
+        self.possible_ufo_points = [500, 1000, 1500, 2000]
+
+    def get_score(self): #get_score
+        """get random score from possible ufo"""
+        self.score = choice(self.possible_ufo_points)
+        return self.score
+
+    def append_score(self):
+        score = self.get_score()
+        if score == 500:
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point500_1.png'))
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point500_1.png'))
+        elif score == 1000:
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point1000_1.png'))
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point1000_1.png'))
+        elif score == 1500:
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point1500_1.png'))
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point1500_1.png'))
+        elif score == 2000:
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
+            Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
+        print('append', score)
+
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
         return r.right >= rscreen.right or r.left <= 0
 
     def update(self):
-
-        # num = randint(0, 5000)
-        # if self.shooting_bullets:
-        #    if num == 1:
-        #        self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
         if self.dead and not self.timer_switched:
-            self.timer = Timer(frames=Ufo.images_boom, wait=100, looponce=True)
+            self.timer = Timer(frames=Ufo.images_boom, wait=500, looponce=True)
             self.timer_switched = True
         elif self.dead and self.timer_switched:
-            # print("switched to boom timer", self.timer_boom.frame_index(), len(Alien.images_boom))
+            #print("switched to boom timer", self.timer_boom.frame_index(), len(Ufo.images_boom))
             if self.timer.frame_index() == len(Ufo.images_boom) - 1:
                 self.dead = False
                 self.timer_switched = False
                 self.reallydead = True
                 self.timer.reset()
+                Ufo.images_boom.clear()
         if not self.timer_switched:
             delta = self.settings.ufo_speed * self.settings.ufo_fleet_direction
             self.rect.x += delta

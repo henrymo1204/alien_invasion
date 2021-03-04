@@ -269,3 +269,94 @@ class Alien(Sprite):  # INHERITS from SPRITE
     @staticmethod
     def run_tests():
         print(Alien.images)
+
+class MenuUfos:
+    def __init__(self, settings, screen, menu_ufo_group, ship_height, game, stats, sb, bullets=None):
+        self.settings = settings
+        self.ufos = menu_ufo_group
+        self.screen = screen
+        self.game = game
+        self.ship_height = ship_height
+        self.bullets = bullets
+        self.stats = stats
+        self.sb = sb
+        self.last_UFO_appeared = None
+
+        self.create_fleet()
+
+
+    def create_fleet(self):
+        settings, screen = self.settings, self.screen
+        ufos = MenuUfo(settings=settings, screen=self.screen)
+        ufo_width = ufos.rect.width
+        ufo_height = ufos.rect.height
+        ufos_per_row = 1
+        rows_per_screen = 1
+
+        # now = pg.time.get_ticks()%30000
+        # (now%15000)
+        x = y = 0
+        ufo = MenuUfo(settings=settings, screen=screen, number=y // 2, bullets=self.bullets, shooting=True)
+        self.ufos.add(ufo)
+
+
+    def add(self, ufo):
+        self.ufos.add(ufo)
+
+    def remove(self, ufo):
+        self.ufos.ufos.remove(ufo)
+
+    def draw(self):
+        for ufo in self.ufos.sprites(): ufo.draw()
+
+
+
+class MenuUfo(Sprite):  # INHERITS from SPRITE
+    images = [[pg.image.load('images/ufo' + str(i) + '.png') for i in range(2)]]
+    images_boom = []
+
+    timers = []
+    for i in range(1):
+        timers.append(Timer(frames=images[i], wait=700))
+
+    def __init__(self, settings, screen, number=0, speed=0, bullets=None, shooting=False):
+        super().__init__()
+        self.screen = screen
+        self.settings = settings
+        self.number = number
+        self.update_requests = 0
+        self.dead = False
+        self.reallydead = False
+        self.timer_switched = False
+        self.shooting_bullets = shooting
+        self.bullets = bullets
+
+        # self.image = pg.image.load('images/alien.bmp')
+        # self.rect = self.image.get_rect()
+        # self.images = ['images/invader' + str(number) + str(i) + '.png' for i in range(2)]
+        # print(self.images)
+        # self.frames = [pg.image.load(self.images[i]) for i in range(len(self.images))]
+        self.timer = MenuUfo.timers[number]
+        # self.timer = Timer(frames=self.frames, wait=700)
+        self.rect = self.timer.imagerect().get_rect()
+
+        self.rect.x = self.x = 500
+        self.rect.y = self.y = 450 # TESTING normal value 10
+        # self.rect.x = self.rect.width
+        # self.rect.y = self.rect.height
+
+        self.x = float(self.rect.x)
+        self.speed = speed
+
+    def draw(self):
+        # image = Ufo.images[self.number]
+        # self.screen.blit(image, self.rect)
+        image = self.timer.imagerect()
+        rect = image.get_rect()
+        rect.x, rect.y = self.rect.x, self.rect.y
+        self.screen.blit(image, rect)
+        # self.screen.blit(self.image, self.rect)
+
+    @staticmethod
+    def run_tests():
+        print(MenuUfo.images)

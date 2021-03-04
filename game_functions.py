@@ -48,7 +48,7 @@ def check_events(settings, screen, stats, play_button, ship, bullets):
             check_keyup_events(event=event, ship=ship)
 
 
-def startup_screen(settings, stats, screen, menu_aliens):
+def startup_screen(settings, stats, screen, menu_aliens, menu_ufos):
     """Display the startup menu on the screen, return False if the user wishes to quit,
     True if they are ready to play"""
     menu = Intro(settings, stats, screen)
@@ -75,6 +75,7 @@ def startup_screen(settings, stats, screen, menu_aliens):
         hs_button.draw_button()
         play_button.draw_button()
         menu_aliens.draw()
+        menu_ufos.draw()
         pg.display.flip()
 
     return True

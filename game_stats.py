@@ -1,10 +1,11 @@
 import json
+
 class GameStats():
     def __init__(self, settings):
         self.settings = settings
         self.game_active = False
         self.reset_stats()
-        self.high_score = 0
+        self.high_score = None
         self.level = 1
         self.high_scores_all = None
         self.initialize_high_score()

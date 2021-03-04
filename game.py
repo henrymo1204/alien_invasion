@@ -12,7 +12,7 @@ from scoreboard import Scoreboard
 from sound import Sound
 from alien_bullets import AlienBullets
 from barrier import Barriers
-from menu import MenuAliens
+from menu import MenuAliens, MenuUfos
 from ufo import Ufos
 import time
 import wave
@@ -43,6 +43,7 @@ class Game:
         self.play_button = Button(settings=self.settings, screen=self.screen, msg="Play")
 
         menu_alien_group = Group()
+        menu_ufo_group = Group()
         alien_group = Group()  # group of aliens
         ufo_group = Group()
         barrier_group = Group()  # group of barriers
@@ -71,6 +72,10 @@ class Game:
                                       ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
                                       bullets=self.alienBullets)
 
+        self.menu_ufos = MenuUfos(settings=self.settings, screen=self.screen, menu_ufo_group=menu_ufo_group,
+                                      ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
+                                      bullets=self.alienBullets)
+
         self.barrier = Barriers(settings=self.settings, screen=self.screen, ally_group=barrier_group,
                                 ship_height=self.ship_height, game=self)
 
@@ -82,8 +87,8 @@ class Game:
                          sound=self.sound)  # add ship group
         ship_group.add(self.ship)
         self.settings.init_dynamic_settings()
-        self.stats.high_score = self.hs
-        self.sb.prep_high_score()
+        #self.stats.high_score = self.hs
+        #self.sb.prep_high_score()
 
     def play(self):
         while True:
@@ -111,7 +116,7 @@ class Game:
                 self.sound.pause_bg()
                 # self.menu_aliens.draw()
                 quit_game = not gf.startup_screen(settings=self.settings, stats=self.stats, screen=self.screen,
-                                                  menu_aliens=self.menu_aliens)
+                                                  menu_aliens=self.menu_aliens, menu_ufos=self.menu_ufos)
                 if quit_game:
                     pg.quit()
                     break
