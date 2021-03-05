@@ -76,7 +76,7 @@ class Game:
                                       ship_height=self.ship_height, game=self, stats=self.stats, sb=self.sb,
                                       bullets=self.alienBullets)
 
-        self.barrier = Barriers(settings=self.settings, screen=self.screen, ally_group=barrier_group,
+        self.barrier = Barriers(settings=self.settings, screen=self.screen, barrier_group=barrier_group,
                                 ship_height=self.ship_height, game=self)
 
         self.bullets = Bullets(bullet_group=human_bullet_group, alien_bullet_group=alien_bullet_group,

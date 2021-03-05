@@ -16,9 +16,6 @@ class Ufos:
         self.sb = sb
         self.last_UFO_appeared = None
 
-        """SPAWNED FOR TESTING""" # delete after
-        self.create_fleet()
-
 
     def create_fleet(self):
         settings, screen = self.settings, self.screen

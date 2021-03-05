@@ -39,35 +39,8 @@ class AlienBullets:
         if collisions:
             for barriers in collisions.values():
                 for barrier in barriers:
-                    pil_image = pg.image.tostring(barrier.image, 'RGBA', False)
-                    img = Image.frombytes('RGBA', (128, 98), pil_image)
-                    img = img.convert('RGBA')
-                    datas = img.getdata()
-
-                    newData = []
-                    for item in datas:
-                        num = randint(0, 5)
-                        if num == 1:
-                            newData.append((255, 255, 255, 0))
-                        else:
-                            newData.append(item)
-                    img.putdata(newData)
-
-                    mode = img.mode
-                    size = img.size
-                    data = img.tobytes()
-
-                    py_image = pg.image.fromstring(data, size, mode)
-
-                    barrier.image = py_image
-
-                    barrier.health -= 1
-        # if len(self.alien_group) == 0:
-        #     self.bullets.empty()
-        #     self.settings.increase_speed()
-        #     self.aliens.create_fleet()
-        #     self.stats.level += 1
-        #     self.sb.prep_level()
+                    barrier.update()
+                    barrier.damaged()
 
     def draw(self):
         for bullet in self.bullets.sprites():
@@ -76,6 +49,7 @@ class AlienBullets:
 
 class Bullet(Sprite):
     """A class to manage bullets fired from the ship"""
+
     def __init__(self, settings, screen, ship):
         super().__init__()
         self.screen = screen
