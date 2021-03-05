@@ -111,7 +111,7 @@ class Ufo(Sprite):  # INHERITS from SPRITE
 
 
         self.rect.x = self.x = 0 if self.ufo_direction > 0 else settings.screen_width - 80
-        self.rect.y = self.y = 630 # TESTING normal value 10
+        self.rect.y = self.y = 80 # TESTING normal value 10
         # self.rect.x = self.rect.width
         # self.rect.y = self.rect.height
 

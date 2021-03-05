@@ -18,7 +18,9 @@ class Settings():
         self.debounce = 0.0001
 
         self.score_scale = 1.5
-        self.alien_points = 50
+        self.one_eye_alien_points = 50
+        self.two_eye_alien_points = 100
+        self.three_eye_alien_points = 500
         self.init_dynamic_settings()
 
     def init_dynamic_settings(self):
@@ -36,4 +38,3 @@ class Settings():
         self.ship_speed_factor *= scale
         self.bullet_speed_factor *= scale
         self.alien_speed *= scale
-        self.alien_points = int(self.alien_points * self.score_scale)

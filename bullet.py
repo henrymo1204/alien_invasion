@@ -45,8 +45,18 @@ class Bullets:
                     if not alien.dead:
                         alien.dead = True
                         self.next(alien)
-                        self.stats.score += self.settings.alien_points
-                        self.sb.check_high_score(self.stats.score)
+                        if alien.number == 0:
+                            self.stats.score += self.settings.three_eye_alien_points
+                            self.sb.check_high_score(self.stats.score)
+                            print(3)
+                        elif alien.number == 1:
+                            self.stats.score += self.settings.two_eye_alien_points
+                            self.sb.check_high_score(self.stats.score)
+                            print(2)
+                        elif alien.number == 2:
+                            self.stats.score += self.settings.one_eye_alien_points
+                            self.sb.check_high_score(self.stats.score)
+                            print(1)
                         self.sb.prep_score()
 
         collisions = pg.sprite.groupcollide(self.bullets, self.ufo_group, True, False)

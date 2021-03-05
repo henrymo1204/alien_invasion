@@ -108,9 +108,9 @@ class Intro:
         # text/image information
         self.title = Title(settings.bg_color, self.screen, 'ALIEN', text_size=72)
         self.subtitle = Title(settings.bg_color, self.screen, 'INVASION', text_size=68, text_color=(0, 255, 0))
-        self.point_alien1 = Points(settings.bg_color, self.screen, '=   111', text_size=48)
-        self.point_alien2 = Points(settings.bg_color, self.screen, '=   222', text_size=48)
-        self.point_alien3 = Points(settings.bg_color, self.screen, '=   333', text_size=48)
+        self.point_alien1 = Points(settings.bg_color, self.screen, '=   50', text_size=48)
+        self.point_alien2 = Points(settings.bg_color, self.screen, '=   100', text_size=48)
+        self.point_alien3 = Points(settings.bg_color, self.screen, '=   500', text_size=48)
         self.point_alien4 = Points(settings.bg_color, self.screen, '=    ?   ', text_size=48)
 
         self.prep_image()
@@ -221,9 +221,9 @@ class MenuAliens:
 
 
 class Alien(Sprite):  # INHERITS from SPRITE
-    images = [[pg.image.load('images/three_eye_alien' + str(i) + '.png') for i in range(8)],
+    images = [[pg.image.load('images/one_eye_alien' + str(i) + '.png') for i in range(4)],
               [pg.image.load('images/two_eye_alien' + str(i) + '.png') for i in range(4)],
-              [pg.image.load('images/one_eye_alien' + str(i) + '.png') for i in range(4)]]
+              [pg.image.load('images/three_eye_alien' + str(i) + '.png') for i in range(8)]]
 
     timers = []
     for i in range(3):

@@ -135,10 +135,10 @@ class Alien(Sprite):   # INHERITS from SPRITE
 
     def update(self):
         if self.shooting_bullets:
-            num = randint(20000, 25000)
+            num = randint(1000, 5000)
             now = pg.time.get_ticks()
             if self.last_bullet_shot is None:
-                num = randint(0, 1000)
+                num = randint(0, 500)
                 if num == 1:
                     self.bullets.add(settings=self.settings, screen=self.screen, ship=self)
                     self.last_bullet_shot = pg.time.get_ticks()
