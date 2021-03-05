@@ -27,7 +27,6 @@ class Ship(Sprite):
         self.moving_left = False
         self.bullets = bullets
         self.shooting_bullets = False
-        self.bullets_attempted = 0
 
         self.hit = False
         self.explode = False

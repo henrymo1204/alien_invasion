@@ -27,19 +27,19 @@ class Bullets:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-                # self.count -= 1
+                self.count -= 1
             elif bullet.gone:
                 self.bullets.remove(bullet)
-                # self.count -= 1
-                # self.alien_bullets.remove(alienBullet)
+                self.count -= 1
             for alienBullet in self.alien_bullets.copy():
                 if bullet.rect.colliderect(alienBullet):
                     bullet.collide = True
+                    self.count -= 1
                     alienBullet.gone = True
 
         collisions = pg.sprite.groupcollide(self.bullets, self.alien_group, True, False)
         if collisions:
-            # self.count -= 1
+            self.count -= 1
             for aliens in collisions.values():
                 for alien in aliens:
                     if not alien.dead:
@@ -48,20 +48,17 @@ class Bullets:
                         if alien.number == 0:
                             self.stats.score += self.settings.three_eye_alien_points
                             self.sb.check_high_score(self.stats.score)
-                            print(3)
                         elif alien.number == 1:
                             self.stats.score += self.settings.two_eye_alien_points
                             self.sb.check_high_score(self.stats.score)
-                            print(2)
                         elif alien.number == 2:
                             self.stats.score += self.settings.one_eye_alien_points
                             self.sb.check_high_score(self.stats.score)
-                            print(1)
                         self.sb.prep_score()
 
         collisions = pg.sprite.groupcollide(self.bullets, self.ufo_group, True, False)
         if collisions:
-            # self.count -= 1
+            self.count -= 1
             for ufos in collisions.values():
                 for ufo in ufos:
                     # print('ufo hit')
@@ -77,7 +74,7 @@ class Bullets:
                 for barrier in barriers:
                     barrier.update()
                     barrier.damaged()
-            # self.count -= 1
+            self.count -= 1
 
         if len(self.alien_group) == 0:
             self.bullets.empty()
@@ -88,7 +85,7 @@ class Bullets:
             self.stats.level += 1
             self.sb.prep_level()
             self.barriers.reset()
-            # self.count = 0
+            self.count = 0
 
     def next(self, alien):
         for i in self.alien_group:
