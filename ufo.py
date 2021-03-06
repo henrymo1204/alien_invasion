@@ -140,7 +140,7 @@ class Ufo(Sprite):  # INHERITS from SPRITE
         elif score == 2000:
             Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
             Ufo.images_boom.append(pg.image.load('images/ufo_points/ufo_point2000_1.png'))
-        print('appended ', score)
+        #print('appended ', score)
 
     def check_edges(self):
         r, rscreen = self.rect, self.screen.get_rect()
