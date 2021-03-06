@@ -134,7 +134,6 @@ class Game:
             self.bullets.bullets.empty()
             self.ship.center_ship()
             self.barrier.reset()
-            self.bullets.count = 0
             time.sleep(1)
         else:
             self.stats.game_active = False

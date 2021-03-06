@@ -12,7 +12,7 @@ class Settings():
         self.bullet_width = 5
         self.bullet_height = 30
         self.bullet_color = 255, 0, 0
-        self.bullets_every = 1
+        self.bullets_every = 500
 
         self.fleet_drop_speed = 10
         self.debounce = 0.0001

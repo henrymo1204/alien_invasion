@@ -33,6 +33,8 @@ class Ship(Sprite):
         self.gone = False
         self.timer = Ship.timer_boom
 
+        self.last_bullet_shot = None
+
 
     def center_ship(self):
         self.rect.centerx = self.screen_rect.centerx

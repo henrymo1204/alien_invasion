@@ -10,10 +10,12 @@ def check_keydown_events(event, settings, screen, ship, bullets):
     elif event.key == pg.K_LEFT:
         ship.moving_left = True
     elif event.key == pg.K_SPACE:
-        if bullets.count < 5:
-            bullets.count += 1
+        if not ship.last_bullet_shot:
+            ship.last_bullet_shot = pg.time.get_ticks()
             ship.shooting_bullets = True
-            # print(bullets.count)
+        elif pg.time.get_ticks() >= ship.last_bullet_shot + settings.bullets_every:
+            ship.last_bullet_shot = pg.time.get_ticks()
+            ship.shooting_bullets = True
     elif event.key == pg.K_q:
         sys.exit()
 
